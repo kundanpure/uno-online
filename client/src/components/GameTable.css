@@ -1,0 +1,204 @@
+/* ─── Game Table ─────────────────────────── */
+
+.game-table {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.table-center {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Draw pile */
+.draw-pile {
+    position: relative;
+    transition: all 0.3s;
+}
+
+.draw-pile-active {
+    cursor: pointer;
+}
+
+.draw-pile-active:hover {
+    transform: scale(1.08);
+}
+
+.draw-pile-active:hover .card {
+    box-shadow: 0 0 20px var(--accent-glow);
+    border-color: var(--accent-primary);
+}
+
+.pile-count {
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+.draw-label {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent-primary);
+    animation: bounce 1s ease-in-out infinite;
+    white-space: nowrap;
+}
+
+/* Discard pile */
+.discard-pile {
+    position: relative;
+}
+
+.discard-pile .card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.last-action {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--uno-yellow);
+    text-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+    animation: scaleIn 0.3s ease-out;
+    white-space: nowrap;
+    z-index: 5;
+}
+
+/* Direction indicator */
+.direction-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border: 2px dashed rgba(255, 255, 255, 0.06);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.direction-indicator::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: spin 4s linear infinite;
+}
+
+.direction-indicator.ccw::after {
+    animation-direction: reverse;
+}
+
+/* Turn timer */
+.turn-timer {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.timer-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 3;
+}
+
+.timer-fill {
+    fill: none;
+    stroke: var(--accent-primary);
+    stroke-width: 3;
+    stroke-linecap: round;
+    transition: stroke-dasharray 0.5s;
+}
+
+.timer-text {
+    position: absolute;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.turn-timer.urgent .timer-text {
+    color: var(--uno-red);
+    animation: pulse 0.5s ease-in-out infinite;
+}
+
+/* Current color indicator */
+.current-color {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 6px 18px;
+    border-radius: 20px;
+    z-index: 5;
+}
+
+.color-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .table-center {
+        gap: 20px;
+    }
+
+    .direction-indicator {
+        width: 150px;
+        height: 150px;
+    }
+
+    .turn-timer {
+        width: 40px;
+        height: 40px;
+        top: 10px;
+        right: 10px;
+    }
+
+    .timer-text {
+        font-size: 0.65rem;
+    }
+}

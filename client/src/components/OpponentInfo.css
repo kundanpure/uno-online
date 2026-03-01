@@ -1,0 +1,122 @@
+/* ─── Opponent Info ──────────────────────── */
+
+.opponent {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-subtle);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s;
+    animation: fadeIn 0.4s ease-out backwards;
+    min-width: 120px;
+}
+
+.opponent-active {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 12px var(--accent-glow);
+    background: rgba(168, 85, 247, 0.1);
+}
+
+.opponent-dc {
+    opacity: 0.5;
+}
+
+.opponent-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-round);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: white;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.turn-ring {
+    position: absolute;
+    inset: -4px;
+    border: 2px solid var(--accent-primary);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.opponent-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+}
+
+.opponent-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.opponent-cards {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.uno-warning {
+    animation: pulse 0.5s ease-in-out infinite;
+}
+
+.opponent-dc-badge {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: rgba(239, 68, 68, 0.3);
+    color: var(--uno-red);
+    font-weight: 700;
+}
+
+.call-uno-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(239, 68, 68, 0.2);
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    animation: pulse 0.8s ease-in-out infinite;
+}
+
+.call-uno-btn:hover {
+    background: rgba(239, 68, 68, 0.4);
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .opponent {
+        padding: 6px 8px;
+        gap: 6px;
+        min-width: 100px;
+    }
+
+    .opponent-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+    }
+
+    .opponent-name {
+        font-size: 0.7rem;
+    }
+
+    .opponent-cards {
+        font-size: 0.6rem;
+    }
+}

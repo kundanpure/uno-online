@@ -1,0 +1,106 @@
+/* ─── Scoreboard ─────────────────────────── */
+
+.scoreboard-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.scoreboard-modal {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-xl);
+    padding: 36px;
+    max-width: 420px;
+    width: 90%;
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: var(--shadow-card);
+}
+
+.trophy-section {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.trophy-emoji {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 12px;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+.trophy-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.standings {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 28px;
+}
+
+.standing-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    animation: slideInLeft 0.4s ease-out backwards;
+}
+
+.standing-row.winner {
+    background: rgba(234, 179, 8, 0.1);
+    border-color: rgba(234, 179, 8, 0.3);
+}
+
+.standing-row.is-me {
+    border-color: var(--border-accent);
+}
+
+.standing-rank {
+    font-size: 1.2rem;
+    width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.standing-name {
+    flex: 1;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.you-tag {
+    color: var(--accent-primary);
+    font-size: 0.8rem;
+}
+
+.standing-score {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.scoreboard-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.scoreboard-actions .btn {
+    width: 100%;
+}

@@ -1,0 +1,176 @@
+/* ─── Game Page ──────────────────────────── */
+
+.game {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0e17 100%);
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+
+.game-loading {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: var(--text-secondary);
+}
+
+/* Turn glow border */
+.turn-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    border: 2px solid var(--accent-primary);
+    border-radius: 0;
+    animation: glow 2s ease-in-out infinite;
+    opacity: 0.5;
+}
+
+.game.my-turn {
+    background: radial-gradient(ellipse at center, #1e1a30 0%, #0f0e17 100%);
+}
+
+/* Opponents area */
+.game-opponents {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 12px 16px 8px;
+    flex-wrap: wrap;
+    z-index: 1;
+}
+
+/* Turn indicator */
+.turn-indicator {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 20px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+    z-index: 10;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.turn-indicator.active {
+    color: var(--accent-primary);
+    border-color: var(--border-accent);
+    box-shadow: var(--shadow-glow);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* UNO button */
+.uno-button {
+    position: fixed;
+    right: 20px;
+    bottom: 180px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 900;
+    font-family: var(--font-main);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    z-index: 20;
+    animation: pulse 0.8s ease-in-out infinite, glow 1s ease-in-out infinite;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.5);
+    transition: transform 0.2s;
+}
+
+.uno-button:hover {
+    transform: scale(1.1);
+}
+
+.uno-button:active {
+    transform: scale(0.95);
+}
+
+/* Chat float button */
+.chat-float-btn {
+    position: fixed;
+    right: 16px;
+    top: 16px;
+    z-index: 15;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-subtle);
+    font-size: 1.2rem;
+    width: 44px;
+    height: 44px;
+}
+
+/* Game notification */
+.game-notification {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 24px;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.9rem;
+    z-index: 50;
+    animation: slideUp 0.3s ease-out;
+    backdrop-filter: blur(10px);
+    white-space: nowrap;
+}
+
+.game-notification.info {
+    background: rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    color: #93c5fd;
+}
+
+.game-notification.success {
+    background: rgba(34, 197, 94, 0.2);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #86efac;
+}
+
+.game-notification.warning {
+    background: rgba(234, 179, 8, 0.2);
+    border: 1px solid rgba(234, 179, 8, 0.4);
+    color: #fde047;
+}
+
+.game-notification.error {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .game-opponents {
+        gap: 8px;
+        padding: 8px 8px 4px;
+    }
+
+    .uno-button {
+        width: 65px;
+        height: 65px;
+        font-size: 1.1rem;
+        right: 12px;
+        bottom: 160px;
+    }
+
+    .turn-indicator {
+        font-size: 0.75rem;
+        padding: 6px 14px;
+    }
+}

@@ -1,0 +1,155 @@
+/* ─── Card Component ─────────────────────── */
+
+.card {
+    width: 80px;
+    height: 120px;
+    border-radius: 10px;
+    position: relative;
+    cursor: default;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.card-sm {
+    width: 50px;
+    height: 75px;
+    border-radius: 6px;
+}
+
+.card-sm .card-corner {
+    font-size: 0.6rem;
+}
+
+.card-sm .card-value {
+    font-size: 1.2rem;
+}
+
+.card-sm .card-corner-top {
+    top: 4px;
+    left: 5px;
+}
+
+.card-sm .card-corner-bottom {
+    bottom: 4px;
+    right: 5px;
+}
+
+/* Playable state */
+.card-playable {
+    cursor: pointer;
+}
+
+.card-playable:hover {
+    transform: translateY(-16px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.card-playable:active {
+    transform: translateY(-8px) scale(1);
+}
+
+/* Inner layout */
+.card-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: inherit;
+}
+
+/* Oval background element */
+.card-oval {
+    position: absolute;
+    width: 65%;
+    height: 85%;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    transform: rotate(-30deg);
+    pointer-events: none;
+}
+
+/* Corner values */
+.card-corner {
+    position: absolute;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    font-family: var(--font-main);
+}
+
+.card-corner-top {
+    top: 6px;
+    left: 8px;
+}
+
+.card-corner-bottom {
+    bottom: 6px;
+    right: 8px;
+    transform: rotate(180deg);
+}
+
+/* Center value */
+.card-center {
+    position: relative;
+    z-index: 1;
+}
+
+.card-value {
+    font-size: 2rem;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    font-family: var(--font-main);
+}
+
+/* Wild card */
+.card-wild .card-oval {
+    background: linear-gradient(135deg,
+            rgba(239, 68, 68, 0.3),
+            rgba(59, 130, 246, 0.3),
+            rgba(34, 197, 94, 0.3),
+            rgba(234, 179, 8, 0.3));
+}
+
+/* Card back */
+.card-back {
+    background: #2a2a4a;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-back-inner {
+    position: absolute;
+    inset: 4px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.card-back-logo {
+    color: white;
+    font-weight: 900;
+    font-size: 1rem;
+    font-family: var(--font-main);
+    transform: rotate(-20deg);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.card-sm .card-back-logo {
+    font-size: 0.65rem;
+}
+
+.card-sm .card-back-inner {
+    inset: 3px;
+    border-radius: 4px;
+}

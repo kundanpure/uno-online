@@ -1,0 +1,251 @@
+/* ─── Home Page ──────────────────────────── */
+
+.home {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background effects */
+.home-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+}
+
+.bg-orb-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--uno-red);
+    top: -100px;
+    left: -100px;
+    animation: float 8s ease-in-out infinite;
+}
+
+.bg-orb-2 {
+    width: 300px;
+    height: 300px;
+    background: var(--uno-blue);
+    bottom: -50px;
+    right: -50px;
+    animation: float 10s ease-in-out infinite 2s;
+}
+
+.bg-orb-3 {
+    width: 250px;
+    height: 250px;
+    background: var(--accent-primary);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: float 12s ease-in-out infinite 4s;
+}
+
+.floating-card {
+    position: absolute;
+    font-size: 2rem;
+    left: var(--x);
+    top: var(--y);
+    animation: float 6s ease-in-out infinite var(--delay);
+    opacity: 0.3;
+    user-select: none;
+}
+
+/* Content */
+.home-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+/* Hero */
+.hero {
+    text-align: center;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.hero-logo {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.logo-letter {
+    font-size: 5rem;
+    font-weight: 900;
+    color: var(--color);
+    text-shadow: 0 4px 20px color-mix(in srgb, var(--color) 50%, transparent);
+    animation: bounce 2s ease-in-out infinite;
+    animation-delay: calc(var(--delay, 0s));
+}
+
+.logo-letter:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.logo-letter:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.logo-letter:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.hero-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+}
+
+/* Action buttons */
+.home-actions {
+    width: 100%;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.home-btn {
+    width: 100%;
+    font-size: 1.15rem;
+    padding: 18px 24px;
+}
+
+.btn-emoji {
+    font-size: 1.4rem;
+}
+
+/* Form */
+.home-form {
+    padding: 28px;
+    width: 100%;
+}
+
+.home-form h3 {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+    text-align: center;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.form-group strong {
+    color: var(--accent-primary);
+}
+
+/* Slider */
+.slider {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--bg-glass);
+    border-radius: 3px;
+    outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-gradient);
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.room-code-input {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+}
+
+.error-msg {
+    color: var(--uno-red);
+    font-size: 0.875rem;
+    margin-bottom: 12px;
+    text-align: center;
+    animation: fadeIn 0.3s;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.form-actions .btn {
+    flex: 1;
+}
+
+/* Footer */
+.home-footer {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    animation: fadeIn 1s ease-out 0.5s backwards;
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .logo-letter {
+        font-size: 3.5rem;
+    }
+
+    .home-content {
+        padding: 16px;
+    }
+
+    .home-form {
+        padding: 20px;
+    }
+}
