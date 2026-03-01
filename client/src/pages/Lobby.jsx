@@ -12,45 +12,57 @@ function Lobby() {
     const [copied, setCopied] = useState(false)
     const [error, setError] = useState('')
     const [showChat, setShowChat] = useState(false)
+    const [joinFailed, setJoinFailed] = useState(false)
 
     useEffect(() => {
         if (!socket.connected) socket.connect()
 
-        // If we don't have a playerId for this room, redirect to join
-        const storedRoom = localStorage.getItem('unoRoomId')
-        if (!playerId || storedRoom !== roomId) {
-            // Need to join this room
-            const name = localStorage.getItem('unoPlayerName')
-            if (!name) {
-                navigate(`/?code=${roomId}`)
-                return
-            }
+        const name = localStorage.getItem('unoPlayerName')
+        if (!name) {
+            navigate(`/?code=${roomId}`)
+            return
+        }
+
+        // Wait for socket to connect, then join
+        const doJoin = () => {
+            const storedRoom = localStorage.getItem('unoRoomId')
+            const existingId = (storedRoom === roomId) ? localStorage.getItem('unoPlayerId') : null
 
             socket.emit('joinRoom', {
                 roomId,
-                playerName: name
+                playerName: name,
+                playerId: existingId
             }, (response) => {
-                if (response.success) {
+                if (response && response.success) {
                     localStorage.setItem('unoPlayerId', response.playerId)
                     localStorage.setItem('unoRoomId', roomId)
                     setPlayerId(response.playerId)
                     setLobby(response.lobby)
+                    setJoinFailed(false)
                 } else {
-                    setError(response.error || 'Failed to join')
-                }
-            })
-        } else {
-            // Already in room, request state
-            socket.emit('joinRoom', {
-                roomId,
-                playerName: localStorage.getItem('unoPlayerName'),
-                playerId: playerId
-            }, (response) => {
-                if (response.success) {
-                    setLobby(response.lobby)
+                    const errMsg = response?.error || 'Failed to join room'
+                    setError(errMsg)
+                    setJoinFailed(true)
+                    // Clear stale room data
+                    localStorage.removeItem('unoRoomId')
+                    localStorage.removeItem('unoPlayerId')
                 }
             })
         }
+
+        if (socket.connected) {
+            doJoin()
+        } else {
+            socket.once('connect', doJoin)
+        }
+
+        // Timeout: if join doesn't respond in 10 seconds, show error
+        const timeout = setTimeout(() => {
+            if (!lobby) {
+                setError('Connection timed out. Try creating a new room.')
+                setJoinFailed(true)
+            }
+        }, 10000)
 
         socket.on('roomUpdate', (data) => {
             setLobby(data)
@@ -65,9 +77,11 @@ function Lobby() {
         })
 
         return () => {
+            clearTimeout(timeout)
             socket.off('roomUpdate')
             socket.off('gameStart')
             socket.off('rematch')
+            socket.off('connect', doJoin)
         }
     }, [roomId, navigate])
 
@@ -110,9 +124,23 @@ function Lobby() {
     if (!lobby) {
         return (
             <div className="lobby-loading">
-                <div className="loading-spinner"></div>
-                <p>Joining room...</p>
-                {error && <div className="error-msg mt-2">{error}</div>}
+                {joinFailed ? (
+                    <>
+                        <p style={{ fontSize: '2rem' }}>😕</p>
+                        <p>{error || 'Room not found'}</p>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '8px' }}>
+                            The room may have expired or the server restarted.
+                        </p>
+                        <button className="btn btn-primary mt-2" onClick={() => navigate('/')}>
+                            🏠 Create a New Room
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <div className="loading-spinner"></div>
+                        <p>Joining room...</p>
+                    </>
+                )}
             </div>
         )
     }
