@@ -15,11 +15,14 @@ const isProduction = process.env.NODE_ENV === 'production';
 const io = new Server(server, {
     cors: {
         origin: isProduction ? '*' : ['http://localhost:5173', 'http://localhost:3000'],
-        methods: ['GET', 'POST']
+        methods: ['GET', 'POST'],
+        credentials: true
     },
     pingTimeout: 60000,
     pingInterval: 25000,
-    transports: ['websocket', 'polling']
+    transports: ['polling', 'websocket'],  // polling FIRST — critical for Render's reverse proxy
+    allowUpgrades: true,
+    upgradeTimeout: 30000
 });
 
 app.use(cors());
@@ -319,13 +322,22 @@ io.on('connection', (socket) => {
                 const player = room.players.get(currentPlayerId);
 
                 if (room.state === 'lobby') {
-                    room.removePlayer(currentPlayerId);
-                    if (room.players.size === 0) {
-                        rooms.delete(room.id);
-                        console.log(`[room] Deleted empty room: ${room.id}`);
-                    } else {
-                        io.to(room.id).emit('roomUpdate', room.getLobbyState());
-                    }
+                    // Grace period: don't remove immediately (socket might reconnect)
+                    if (player) player.isConnected = false;
+                    setTimeout(() => {
+                        const r = rooms.get(currentRoomId);
+                        if (!r) return;
+                        const p = r.players.get(currentPlayerId);
+                        if (p && !p.isConnected) {
+                            r.removePlayer(currentPlayerId);
+                            if (r.players.size === 0) {
+                                rooms.delete(r.id);
+                                console.log(`[room] Deleted empty room: ${r.id}`);
+                            } else {
+                                io.to(r.id).emit('roomUpdate', r.getLobbyState());
+                            }
+                        }
+                    }, 10000); // 10s grace period for reconnections
                 } else {
                     room.handleDisconnect(currentPlayerId);
                     io.to(room.id).emit('playerDisconnected', {
@@ -425,6 +437,6 @@ app.get('*', (req, res) => {
 
 // ─── Start server ──────────────────────────────────
 const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
-    console.log(`\n🎴 UNO Server running on http://localhost:${PORT}\n`);
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`\n🎴 UNO Server running on http://0.0.0.0:${PORT}\n`);
 });

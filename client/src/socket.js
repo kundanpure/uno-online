@@ -7,10 +7,11 @@ const URL = import.meta.env.PROD ? window.location.origin : '';
 const socket = io(URL, {
     autoConnect: false,
     reconnection: true,
-    reconnectionAttempts: 15,
+    reconnectionAttempts: 20,
     reconnectionDelay: 1000,
-    timeout: 15000,
-    transports: ['websocket', 'polling']
+    reconnectionDelayMax: 5000,
+    timeout: 20000,
+    transports: ['polling', 'websocket'],  // polling FIRST — matches server config for Render
 });
 
 export default socket;
