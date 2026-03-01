@@ -58,6 +58,11 @@ io.on('connection', (socket) => {
     let currentRoomId = null;
     let currentPlayerId = null;
 
+    // Safe callback wrapper — socket.io reconnections may omit ack
+    const safeCallback = (cb, data) => {
+        if (typeof cb === 'function') cb(data);
+    };
+
     // ─── CREATE ROOM ──────────────────────────────────
     socket.on('createRoom', ({ playerName, maxPlayers }, callback) => {
         const playerId = uuidv4();
@@ -77,7 +82,7 @@ io.on('connection', (socket) => {
 
         console.log(`[room] Created: ${room.id} by ${playerName}`);
 
-        callback({
+        safeCallback(callback, {
             success: true,
             roomId: room.id,
             playerId,
@@ -89,7 +94,7 @@ io.on('connection', (socket) => {
     socket.on('joinRoom', ({ roomId, playerName, playerId: existingId }, callback) => {
         const room = rooms.get(roomId);
         if (!room) {
-            return callback({ success: false, error: 'Room not found' });
+            return safeCallback(callback, { success: false, error: 'Room not found' });
         }
 
         // Check reconnection
@@ -106,7 +111,7 @@ io.on('connection', (socket) => {
             playerId = uuidv4();
             const result = room.addPlayer(playerId, playerName);
             if (!result.success) {
-                return callback({ success: false, error: result.error });
+                return safeCallback(callback, { success: false, error: result.error });
             }
             room.setPlayerSocket(playerId, socket.id);
         }
@@ -117,7 +122,7 @@ io.on('connection', (socket) => {
 
         console.log(`[room] ${isReconnect ? 'Reconnected' : 'Joined'}: ${playerName} → ${room.id}`);
 
-        callback({
+        safeCallback(callback, {
             success: true,
             roomId: room.id,
             playerId,
@@ -144,25 +149,25 @@ io.on('connection', (socket) => {
     // ─── PLAYER READY ─────────────────────────────────
     socket.on('playerReady', ({ ready }, callback) => {
         const room = rooms.get(currentRoomId);
-        if (!room) return callback?.({ success: false });
+        if (!room) return safeCallback(callback, { success: false });
 
         room.setPlayerReady(currentPlayerId, ready);
         io.to(room.id).emit('roomUpdate', room.getLobbyState());
-        callback?.({ success: true });
+        safeCallback(callback, { success: true });
     });
 
     // ─── START GAME ───────────────────────────────────
     socket.on('startGame', (_, callback) => {
         const room = rooms.get(currentRoomId);
-        if (!room) return callback?.({ success: false, error: 'Room not found' });
+        if (!room) return safeCallback(callback, { success: false, error: 'Room not found' });
 
         if (currentPlayerId !== room.hostId) {
-            return callback?.({ success: false, error: 'Only host can start' });
+            return safeCallback(callback, { success: false, error: 'Only host can start' });
         }
 
         const result = room.startGame();
         if (!result.success) {
-            return callback?.({ success: false, error: result.error });
+            return safeCallback(callback, { success: false, error: result.error });
         }
 
         console.log(`[game] Started in room ${room.id}`);
@@ -180,18 +185,18 @@ io.on('connection', (socket) => {
             }
         }
 
-        callback?.({ success: true });
+        safeCallback(callback, { success: true });
     });
 
     // ─── PLAY CARD ────────────────────────────────────
     socket.on('playCard', ({ cardId, chosenColor }, callback) => {
         const room = rooms.get(currentRoomId);
-        if (!room || !room.game) return callback?.({ success: false });
+        if (!room || !room.game) return safeCallback(callback, { success: false });
 
         const result = room.game.playCard(currentPlayerId, cardId, chosenColor);
 
         if (!result.success) {
-            return callback?.({ success: false, error: result.error });
+            return safeCallback(callback, { success: false, error: result.error });
         }
 
         // Broadcast updated state
@@ -220,18 +225,18 @@ io.on('connection', (socket) => {
             checkBotTurn(room);
         }
 
-        callback?.({ success: true });
+        safeCallback(callback, { success: true });
     });
 
     // ─── DRAW CARD ────────────────────────────────────
     socket.on('drawCard', (_, callback) => {
         const room = rooms.get(currentRoomId);
-        if (!room || !room.game) return callback?.({ success: false });
+        if (!room || !room.game) return safeCallback(callback, { success: false });
 
         const result = room.game.drawCard(currentPlayerId);
 
         if (!result.success) {
-            return callback?.({ success: false, error: result.error });
+            return safeCallback(callback, { success: false, error: result.error });
         }
 
         // Broadcast updated state
@@ -243,13 +248,13 @@ io.on('connection', (socket) => {
         // Check bot turn
         checkBotTurn(room);
 
-        callback?.({ success: true, card: result.card });
+        safeCallback(callback, { success: true, card: result.card });
     });
 
     // ─── SAY UNO ──────────────────────────────────────
     socket.on('sayUno', (_, callback) => {
         const room = rooms.get(currentRoomId);
-        if (!room || !room.game) return callback?.({ success: false });
+        if (!room || !room.game) return safeCallback(callback, { success: false });
 
         room.game.sayUno(currentPlayerId);
         const player = room.players.get(currentPlayerId);
@@ -260,13 +265,13 @@ io.on('connection', (socket) => {
             playerName: player?.name
         });
 
-        callback?.({ success: true });
+        safeCallback(callback, { success: true });
     });
 
     // ─── CALL UNO (challenge) ─────────────────────────
     socket.on('callUno', ({ targetId }, callback) => {
         const room = rooms.get(currentRoomId);
-        if (!room || !room.game) return callback?.({ success: false });
+        if (!room || !room.game) return safeCallback(callback, { success: false });
 
         const result = room.game.callUno(currentPlayerId, targetId);
 
@@ -284,32 +289,32 @@ io.on('connection', (socket) => {
             sendAllHands(room);
         }
 
-        callback?.(result);
+        safeCallback(callback, result);
     });
 
     // ─── CHAT ─────────────────────────────────────────
     socket.on('chatMessage', ({ message }, callback) => {
         const room = rooms.get(currentRoomId);
-        if (!room) return callback?.({ success: false });
+        if (!room) return safeCallback(callback, { success: false });
 
         const msg = room.addChatMessage(currentPlayerId, message);
         if (msg) {
             io.to(room.id).emit('chatUpdate', msg);
         }
 
-        callback?.({ success: true });
+        safeCallback(callback, { success: true });
     });
 
     // ─── REMATCH ─────────────────────────────────────
     socket.on('rematch', (_, callback) => {
         const room = rooms.get(currentRoomId);
-        if (!room) return callback?.({ success: false });
+        if (!room) return safeCallback(callback, { success: false });
 
         room.resetForRematch();
         io.to(room.id).emit('roomUpdate', room.getLobbyState());
         io.to(room.id).emit('rematch', {});
 
-        callback?.({ success: true });
+        safeCallback(callback, { success: true });
     });
 
     // ─── DISCONNECT ───────────────────────────────────
