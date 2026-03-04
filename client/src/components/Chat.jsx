@@ -64,8 +64,13 @@ function Chat({ roomId, playerId, messages, onClose }) {
                 ))}
             </div>
 
-            {/* Quick text phrases */}
+            {/* Quick text phrases (+ emojis for mobile where emoji row is hidden) */}
             <div className="chat-quick-phrases">
+                {emojis.map(e => (
+                    <button key={e} className="quick-phrase quick-phrase-emoji" onClick={() => sendQuick(e)}>
+                        {e}
+                    </button>
+                ))}
                 {phrases.map(p => (
                     <button key={p} className="quick-phrase" onClick={() => sendQuick(p)}>
                         {p}

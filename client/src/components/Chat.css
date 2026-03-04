@@ -169,6 +169,11 @@
     transform: scale(0.95);
 }
 
+/* On desktop, emojis in phrase row are hidden (they have their own row above) */
+.quick-phrase-emoji {
+    display: none;
+}
+
 /* ─── Input Row ──────────────────────────── */
 .chat-input-row {
     display: flex;
@@ -205,13 +210,25 @@
         padding-bottom: max(10px, env(safe-area-inset-bottom));
     }
 
-    .quick-emoji {
-        width: 34px;
-        height: 30px;
+    /* On mobile: hide separate emoji row, put everything in phrases row */
+    .chat-quick-emojis {
+        display: none;
+    }
+
+    .chat-quick-phrases {
+        padding: 8px 12px;
+        gap: 8px;
     }
 
     .quick-phrase {
-        font-size: 0.65rem;
-        padding: 3px 8px;
+        font-size: 0.72rem;
+        padding: 6px 12px;
+        border-radius: 14px;
+    }
+
+    .quick-phrase-emoji {
+        display: flex;
+        font-size: 1rem;
+        padding: 4px 8px;
     }
 }
