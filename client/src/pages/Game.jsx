@@ -25,7 +25,12 @@ function Game() {
     const [showChat, setShowChat] = useState(false)
     const [notification, setNotification] = useState(null)
     const [turnTimeLeft, setTurnTimeLeft] = useState(45)
+    const [unreadCount, setUnreadCount] = useState(0)
     const turnTimerRef = useRef(null)
+    const showChatRef = useRef(false)
+
+    // Keep ref in sync so socket listener sees latest value
+    useEffect(() => { showChatRef.current = showChat }, [showChat])
 
     // Connect and listen for events
     useEffect(() => {
@@ -94,6 +99,13 @@ function Game() {
             clearTurnTimer()
         })
 
+        // Track unread messages when chat is closed
+        socket.on('chatUpdate', () => {
+            if (!showChatRef.current) {
+                setUnreadCount(prev => prev + 1)
+            }
+        })
+
         return () => {
             socket.off('gameStart')
             socket.off('gameState')
@@ -105,6 +117,7 @@ function Game() {
             socket.off('playerDisconnected')
             socket.off('playerReconnected')
             socket.off('gameOver')
+            socket.off('chatUpdate')
         }
     }, [roomId, navigate])
 
@@ -306,10 +319,16 @@ function Game() {
             )}
 
             {/* Chat */}
-            <button className="btn btn-icon chat-float-btn" onClick={() => setShowChat(!showChat)}>
+            <button className="btn btn-icon chat-float-btn" onClick={() => { setShowChat(!showChat); setUnreadCount(0) }}>
                 💬
+                {unreadCount > 0 && <span className="chat-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>}
             </button>
-            {showChat && <Chat roomId={roomId} playerId={playerId} onClose={() => setShowChat(false)} />}
+            {showChat && (
+                <>
+                    <div className="chat-overlay-bg" onClick={() => setShowChat(false)} />
+                    <Chat roomId={roomId} playerId={playerId} onClose={() => setShowChat(false)} />
+                </>
+            )}
 
             {/* Notification */}
             {notification && (
