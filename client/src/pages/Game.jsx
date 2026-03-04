@@ -339,7 +339,7 @@ function Game() {
             </div>
 
             {/* Chat Button + Panel */}
-            <button className="btn btn-icon chat-float-btn" onClick={() => { setShowChat(!showChat); setUnreadCount(0) }}>
+            <button className="chat-float-btn" onClick={() => { setShowChat(!showChat); setUnreadCount(0) }}>
                 💬
                 {unreadCount > 0 && <span className="chat-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>}
             </button>

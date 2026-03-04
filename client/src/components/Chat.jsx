@@ -22,8 +22,15 @@ function Chat({ roomId, playerId, messages, onClose }) {
         }
     }
 
-    // Quick reactions
-    const reactions = ['👍', '😂', '🔥', 'Lapet ishkoo', 'Bhai! Khatm', 'BC', 'Ab tu Dekh', 'Ruk batata hu', 'Gandi marai geli']
+    const sendQuick = (text) => {
+        socket.emit('chatMessage', { message: text })
+    }
+
+    // Emoji quick taps
+    const emojis = ['👍', '😂', '🔥', '😱', '💀', '🎉']
+
+    // Text quick phrases
+    const phrases = ['Lapet ishkoo', 'Bhai! Khatm', 'BC', 'Ab tu Dekh', 'Ruk batata hu', 'Gandi marai geli']
 
     return (
         <div className="chat-panel glass-panel">
@@ -48,17 +55,20 @@ function Chat({ roomId, playerId, messages, onClose }) {
                 <div ref={messagesEndRef} />
             </div>
 
-            {/* Quick reactions */}
-            <div className="chat-reactions">
-                {reactions.map(r => (
-                    <button
-                        key={r}
-                        className="reaction-btn"
-                        onClick={() => {
-                            socket.emit('chatMessage', { message: r })
-                        }}
-                    >
-                        {r}
+            {/* Quick emojis */}
+            <div className="chat-quick-emojis">
+                {emojis.map(e => (
+                    <button key={e} className="quick-emoji" onClick={() => sendQuick(e)}>
+                        {e}
+                    </button>
+                ))}
+            </div>
+
+            {/* Quick text phrases */}
+            <div className="chat-quick-phrases">
+                {phrases.map(p => (
+                    <button key={p} className="quick-phrase" onClick={() => sendQuick(p)}>
+                        {p}
                     </button>
                 ))}
             </div>
