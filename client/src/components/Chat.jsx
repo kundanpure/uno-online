@@ -2,20 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import socket from '../socket'
 import './Chat.css'
 
-function Chat({ roomId, playerId, onClose }) {
-    const [messages, setMessages] = useState([])
+function Chat({ roomId, playerId, messages, onClose }) {
     const [input, setInput] = useState('')
     const messagesEndRef = useRef(null)
-
-    useEffect(() => {
-        socket.on('chatUpdate', (msg) => {
-            setMessages(prev => [...prev, msg])
-        })
-
-        return () => {
-            socket.off('chatUpdate')
-        }
-    }, [])
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -23,7 +12,6 @@ function Chat({ roomId, playerId, onClose }) {
 
     const sendMessage = () => {
         if (!input.trim()) return
-
         socket.emit('chatMessage', { message: input.trim() })
         setInput('')
     }
@@ -84,6 +72,7 @@ function Chat({ roomId, playerId, onClose }) {
                     onChange={e => setInput(e.target.value)}
                     onKeyPress={handleKeyPress}
                     maxLength={200}
+                    autoFocus
                 />
                 <button className="btn btn-primary btn-sm" onClick={sendMessage}>
                     Send

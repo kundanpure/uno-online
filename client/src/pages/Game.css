@@ -190,9 +190,9 @@
 /* Chat float button */
 .chat-float-btn {
     position: fixed;
-    left: 16px;
+    right: 16px;
     top: 16px;
-    z-index: 25;
+    z-index: 55;
     background: var(--bg-glass);
     border: 1px solid var(--border-subtle);
     font-size: 1.2rem;
@@ -223,9 +223,78 @@
 .chat-overlay-bg {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.3);
     z-index: 40;
-    backdrop-filter: blur(2px);
+}
+
+/* ─── Live Chat Overlay (YouTube-style) ──── */
+.live-chat-overlay {
+    position: fixed;
+    left: 16px;
+    bottom: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 15;
+    pointer-events: none;
+    max-width: 280px;
+}
+
+.live-msg {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    animation: liveMsgIn 0.3s ease-out, liveMsgOut 0.5s ease-in 4.5s forwards;
+    max-width: 100%;
+}
+
+.live-msg-mine {
+    background: rgba(168, 85, 247, 0.35);
+}
+
+.live-msg-name {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--accent-primary);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.live-msg-mine .live-msg-name {
+    color: #c4b5fd;
+}
+
+.live-msg-text {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.9);
+    word-break: break-word;
+}
+
+@keyframes liveMsgIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes liveMsgOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
 }
 
 /* Game notification */
@@ -310,8 +379,27 @@
         top: auto;
         bottom: 180px;
         left: 12px;
+        right: auto;
         width: 40px;
         height: 40px;
         font-size: 1rem;
+    }
+
+    .live-chat-overlay {
+        left: 10px;
+        bottom: 230px;
+        max-width: 200px;
+    }
+
+    .live-msg {
+        padding: 3px 8px;
+    }
+
+    .live-msg-name {
+        font-size: 0.6rem;
+    }
+
+    .live-msg-text {
+        font-size: 0.7rem;
     }
 }

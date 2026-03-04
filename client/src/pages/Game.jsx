@@ -26,8 +26,11 @@ function Game() {
     const [notification, setNotification] = useState(null)
     const [turnTimeLeft, setTurnTimeLeft] = useState(45)
     const [unreadCount, setUnreadCount] = useState(0)
+    const [chatMessages, setChatMessages] = useState([])
+    const [liveMessages, setLiveMessages] = useState([])
     const turnTimerRef = useRef(null)
     const showChatRef = useRef(false)
+    const liveMsgIdRef = useRef(0)
 
     // Keep ref in sync so socket listener sees latest value
     useEffect(() => { showChatRef.current = showChat }, [showChat])
@@ -99,11 +102,18 @@ function Game() {
             clearTurnTimer()
         })
 
-        // Track unread messages when chat is closed
-        socket.on('chatUpdate', () => {
+        // Track chat messages — persist in Game state + show as live overlay
+        socket.on('chatUpdate', (msg) => {
+            setChatMessages(prev => [...prev.slice(-49), msg])
             if (!showChatRef.current) {
                 setUnreadCount(prev => prev + 1)
             }
+            // Add to live floating overlay
+            const liveId = ++liveMsgIdRef.current
+            setLiveMessages(prev => [...prev, { ...msg, liveId }])
+            setTimeout(() => {
+                setLiveMessages(prev => prev.filter(m => m.liveId !== liveId))
+            }, 5000)
         })
 
         return () => {
@@ -318,7 +328,17 @@ function Game() {
                 />
             )}
 
-            {/* Chat */}
+            {/* Live Chat Overlay — YouTube style floating messages */}
+            <div className="live-chat-overlay">
+                {liveMessages.map(msg => (
+                    <div key={msg.liveId} className={`live-msg ${msg.playerId === playerId ? 'live-msg-mine' : ''}`}>
+                        <span className="live-msg-name">{msg.playerName}</span>
+                        <span className="live-msg-text">{msg.message}</span>
+                    </div>
+                ))}
+            </div>
+
+            {/* Chat Button + Panel */}
             <button className="btn btn-icon chat-float-btn" onClick={() => { setShowChat(!showChat); setUnreadCount(0) }}>
                 💬
                 {unreadCount > 0 && <span className="chat-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>}
@@ -326,7 +346,7 @@ function Game() {
             {showChat && (
                 <>
                     <div className="chat-overlay-bg" onClick={() => setShowChat(false)} />
-                    <Chat roomId={roomId} playerId={playerId} onClose={() => setShowChat(false)} />
+                    <Chat roomId={roomId} playerId={playerId} messages={chatMessages} onClose={() => setShowChat(false)} />
                 </>
             )}
 
