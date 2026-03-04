@@ -204,7 +204,8 @@ function Game() {
     const isMyTurn = gameState?.currentPlayerId === playerId
     const me = gameState?.players?.find(p => p.id === playerId)
     const opponents = gameState?.players?.filter(p => p.id !== playerId) || []
-    const showUnoBtn = myHand.length === 2 && isMyTurn
+    // Show UNO button: before playing (2 cards, my turn) OR after playing (1 card, didn't call yet)
+    const showUnoBtn = (myHand.length === 2 && isMyTurn) || (myHand.length === 1 && me && !me.calledUno)
     const canCallUno = opponents.some(p => p.cardCount === 1 && !p.calledUno)
 
     if (!gameState) {

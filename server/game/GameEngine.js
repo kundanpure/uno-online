@@ -133,10 +133,14 @@ class GameEngine {
             this.currentColor = card.color;
         }
 
-        // Check UNO — if player has 1 card and hasn't called UNO
-        if (hand.length === 1) {
-            // They need to call UNO within 3 seconds — tracked externally
-            // Reset their UNO status so they must call again
+        // Check UNO — if player has 1 card left
+        // Only keep them vulnerable if they did NOT call UNO before playing
+        // If they already called UNO (before playing), their status stays protected
+        if (hand.length === 1 && !this.unoCalled.has(playerId)) {
+            // Player didn't say UNO — they're now reportable by others
+            // (unoCalled doesn't contain them, so calledUno will be false in public state)
+        } else if (hand.length > 1) {
+            // If they have more than 1 card, clear any stale UNO call
             this.unoCalled.delete(playerId);
         }
 
