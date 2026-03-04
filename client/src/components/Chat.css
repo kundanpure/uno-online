@@ -101,9 +101,15 @@
 .chat-reactions {
     display: flex;
     gap: 6px;
-    padding: 8px 16px;
+    padding: 8px 12px;
     border-top: 1px solid var(--border-subtle);
-    flex-wrap: wrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.chat-reactions::-webkit-scrollbar {
+    display: none;
 }
 
 .reaction-btn {
