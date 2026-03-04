@@ -46,13 +46,98 @@
     z-index: 1;
 }
 
+/* Play Order Bar */
+.play-order {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 16px;
+    z-index: 3;
+    flex-wrap: wrap;
+}
+
+.play-order-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: 4px;
+}
+
+.play-order-item-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.play-order-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    transition: all 0.3s;
+}
+
+.play-order-num {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.play-order-name {
+    white-space: nowrap;
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+}
+
+.play-order-current {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.play-order-current .play-order-num {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.play-order-me {
+    border-color: rgba(34, 197, 94, 0.4);
+}
+
+.play-order-me .play-order-name {
+    color: #86efac;
+}
+
+.play-order-arrow {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
 /* Turn indicator */
 .turn-indicator {
-    position: fixed;
-    top: 12px;
-    left: 50%;
-    transform: translateX(-50%);
+    text-align: center;
     padding: 8px 20px;
+    margin: 0 auto;
+    width: fit-content;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(10px);
     border-radius: 20px;
@@ -63,6 +148,7 @@
     z-index: 10;
     transition: all 0.3s;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .turn-indicator.active {
@@ -172,5 +258,23 @@
     .turn-indicator {
         font-size: 0.75rem;
         padding: 6px 14px;
+    }
+
+    .play-order {
+        gap: 3px;
+        padding: 4px 8px;
+    }
+
+    .play-order-item {
+        padding: 2px 6px;
+        font-size: 0.65rem;
+    }
+
+    .play-order-name {
+        max-width: 50px;
+    }
+
+    .play-order-label {
+        font-size: 0.6rem;
     }
 }

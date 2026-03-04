@@ -265,6 +265,9 @@ io.on('connection', (socket) => {
             playerName: player?.name
         });
 
+        // Broadcast updated game state so calledUno is reflected on all clients
+        io.to(room.id).emit('gameState', room.game.getPublicState());
+
         safeCallback(callback, { success: true });
     });
 

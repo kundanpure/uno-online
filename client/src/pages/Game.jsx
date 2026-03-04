@@ -216,6 +216,10 @@ function Game() {
         )
     }
 
+    // Build play order list in actual turn sequence
+    const allPlayers = gameState?.players || []
+    const directionSymbol = gameState?.direction === 1 ? '→' : '←'
+
     return (
         <div className={`game ${isMyTurn ? 'my-turn' : ''}`}>
             {/* Turn indicator glow */}
@@ -235,6 +239,20 @@ function Game() {
                 ))}
             </div>
 
+            {/* Play Order Bar */}
+            <div className="play-order">
+                <span className="play-order-label">Order:</span>
+                {allPlayers.map((p, i) => (
+                    <span key={p.id} className="play-order-item-wrap">
+                        <span className={`play-order-item${p.id === gameState.currentPlayerId ? ' play-order-current' : ''}${p.id === playerId ? ' play-order-me' : ''}`}>
+                            <span className="play-order-num">{i + 1}</span>
+                            <span className="play-order-name">{p.id === playerId ? 'You' : p.name}</span>
+                        </span>
+                        {i < allPlayers.length - 1 && <span className="play-order-arrow">{directionSymbol}</span>}
+                    </span>
+                ))}
+            </div>
+
             {/* Center: Game Table */}
             <GameTable
                 topDiscard={gameState.topDiscard}
@@ -246,6 +264,11 @@ function Game() {
                 lastAction={lastAction}
                 turnTimeLeft={turnTimeLeft}
             />
+
+            {/* Turn indicator - above hand */}
+            <div className={`turn-indicator ${isMyTurn ? 'active' : ''}`}>
+                {isMyTurn ? '🎯 Your Turn!' : `⏳ ${gameState.players.find(p => p.id === gameState.currentPlayerId)?.name || 'Opponent'}'s turn`}
+            </div>
 
             {/* UNO Button */}
             {showUnoBtn && (
@@ -262,11 +285,6 @@ function Game() {
                 currentColor={gameState.currentColor}
                 onPlayCard={handlePlayCard}
             />
-
-            {/* Turn indicator text */}
-            <div className={`turn-indicator ${isMyTurn ? 'active' : ''}`}>
-                {isMyTurn ? '🎯 Your Turn!' : `⏳ ${gameState.players.find(p => p.id === gameState.currentPlayerId)?.name || 'Opponent'}'s turn`}
-            </div>
 
             {/* Color Picker Modal */}
             {showColorPicker && (
