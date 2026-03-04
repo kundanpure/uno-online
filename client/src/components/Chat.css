@@ -100,25 +100,29 @@
 
 .chat-reactions {
     display: flex;
-    gap: 4px;
-    padding: 6px 16px;
+    gap: 6px;
+    padding: 8px 16px;
     border-top: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
 }
 
 .reaction-btn {
-    width: 36px;
-    height: 32px;
-    border: none;
-    background: transparent;
-    border-radius: 6px;
+    height: 30px;
+    padding: 0 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.75rem;
     transition: all 0.2s;
+    white-space: nowrap;
+    color: var(--text-secondary);
 }
 
 .reaction-btn:hover {
-    background: var(--bg-glass-hover);
-    transform: scale(1.2);
+    background: rgba(168, 85, 247, 0.2);
+    border-color: var(--accent-primary);
+    transform: scale(1.05);
 }
 
 .chat-input-row {

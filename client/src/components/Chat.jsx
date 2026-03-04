@@ -23,7 +23,7 @@ function Chat({ roomId, playerId, messages, onClose }) {
     }
 
     // Quick reactions
-    const reactions = ['👍', '😂', '😱', '🔥', '💀', '🎉']
+    const reactions = ['👍', '😂', '🔥', 'Lapet ishkoo', 'Bhai! Khatm', 'BC', 'Ab tu Dekh', 'Ruk batata hu', 'Gandi marai geli']
 
     return (
         <div className="chat-panel glass-panel">
