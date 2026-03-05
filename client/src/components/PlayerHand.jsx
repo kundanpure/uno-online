@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import Card from './Card'
 import './PlayerHand.css'
 
@@ -11,6 +11,8 @@ function isValidPlay(card, topCard, currentColor) {
 }
 
 function PlayerHand({ cards, isMyTurn, topDiscard, currentColor, onPlayCard }) {
+    const [playingCardId, setPlayingCardId] = useState(null)
+
     const sortedCards = useMemo(() => {
         return [...cards].sort((a, b) => {
             const colorOrder = { red: 0, green: 1, blue: 2, yellow: 3, wild: 4 }
@@ -23,23 +25,34 @@ function PlayerHand({ cards, isMyTurn, topDiscard, currentColor, onPlayCard }) {
         })
     }, [cards])
 
+    const handlePlay = useCallback((card) => {
+        if (playingCardId) return // prevent double-click
+        setPlayingCardId(card.id)
+        // Delay the actual play so the fly-out animation can play
+        setTimeout(() => {
+            onPlayCard(card)
+            setPlayingCardId(null)
+        }, 300)
+    }, [onPlayCard, playingCardId])
+
     return (
         <div className="player-hand-container">
             <div className="hand-count">{cards.length} cards</div>
             <div className="player-hand">
                 {sortedCards.map((card, index) => {
                     const playable = isMyTurn && isValidPlay(card, topDiscard, currentColor)
+                    const isPlaying = card.id === playingCardId
                     return (
                         <Card
                             key={card.id}
                             card={card}
-                            playable={playable}
-                            onClick={() => onPlayCard(card)}
-                            className={!playable && isMyTurn ? 'card-dimmed' : ''}
+                            playable={playable && !playingCardId}
+                            onClick={() => handlePlay(card)}
+                            className={`${!playable && isMyTurn ? 'card-dimmed' : ''} ${isPlaying ? 'card-playing' : ''}`}
                             style={{
                                 animationDelay: `${index * 0.03}s`,
                                 marginLeft: index > 0 ? '-20px' : '0',
-                                zIndex: index
+                                zIndex: isPlaying ? 100 : index
                             }}
                         />
                     )

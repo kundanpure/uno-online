@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react'
 import Card from './Card'
 import './GameTable.css'
 
@@ -12,6 +13,14 @@ function GameTable({ topDiscard, currentColor, deckCount, direction, isMyTurn, o
     const colorHex = COLOR_MAP[currentColor] || '#a855f7'
     const timerPercent = (turnTimeLeft / 45) * 100
     const timerUrgent = turnTimeLeft <= 10
+    const [drawAnim, setDrawAnim] = useState(false)
+
+    const handleDraw = useCallback(() => {
+        if (!isMyTurn) return
+        setDrawAnim(true)
+        setTimeout(() => setDrawAnim(false), 400)
+        onDrawCard()
+    }, [isMyTurn, onDrawCard])
 
     return (
         <div className="game-table">
@@ -46,8 +55,8 @@ function GameTable({ topDiscard, currentColor, deckCount, direction, isMyTurn, o
             <div className="table-center">
                 {/* Draw pile */}
                 <div
-                    className={`draw-pile ${isMyTurn ? 'draw-pile-active' : ''}`}
-                    onClick={isMyTurn ? onDrawCard : undefined}
+                    className={`draw-pile ${isMyTurn ? 'draw-pile-active' : ''} ${drawAnim ? 'draw-pile-wobble' : ''}`}
+                    onClick={handleDraw}
                     title={isMyTurn ? 'Click to draw a card' : ''}
                 >
                     <Card faceDown />
@@ -65,7 +74,9 @@ function GameTable({ topDiscard, currentColor, deckCount, direction, isMyTurn, o
                             {lastAction.action?.type === 'wild_draw4' && '+4!'}
                         </div>
                     )}
-                    <Card card={topDiscard} />
+                    <div className="discard-card-wrapper" key={topDiscard?.id}>
+                        <Card card={topDiscard} />
+                    </div>
                 </div>
             </div>
         </div>

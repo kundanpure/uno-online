@@ -82,6 +82,61 @@
     z-index: 5;
 }
 
+/* ─── Discard Pile Landing Animation ─────── */
+.discard-card-wrapper {
+    animation: cardLand 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes cardLand {
+    0% {
+        transform: scale(0.4) translateY(60px) rotate(-15deg);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    70% {
+        transform: scale(1.08) translateY(-5px) rotate(2deg);
+    }
+
+    100% {
+        transform: scale(1) translateY(0) rotate(0);
+    }
+}
+
+/* ─── Draw Pile Wobble (when card drawn) ──── */
+.draw-pile-wobble {
+    animation: deckWobble 0.4s ease-out;
+}
+
+@keyframes deckWobble {
+    0% {
+        transform: scale(1);
+    }
+
+    20% {
+        transform: scale(0.92) rotate(-3deg);
+    }
+
+    40% {
+        transform: scale(1.02) rotate(2deg);
+    }
+
+    60% {
+        transform: scale(0.98) rotate(-1deg);
+    }
+
+    80% {
+        transform: scale(1.01);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 /* Direction indicator */
 .direction-indicator {
     position: absolute;

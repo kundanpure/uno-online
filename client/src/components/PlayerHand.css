@@ -48,6 +48,51 @@
     filter: grayscale(30%);
 }
 
+/* ─── Card Play Animation (fly to discard) ── */
+.card-playing {
+    animation: cardFlyOut 0.3s ease-in forwards !important;
+    pointer-events: none;
+}
+
+@keyframes cardFlyOut {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+    40% {
+        transform: translateY(-30px) scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-120px) scale(0.6);
+        opacity: 0;
+    }
+}
+
+/* ─── New Card Received (draw from deck) ──── */
+.player-hand .card:last-child {
+    animation: cardDrawIn 0.5s ease-out backwards;
+}
+
+@keyframes cardDrawIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-80px) scale(0.5) rotate(-15deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-10px) scale(1.05) rotate(2deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0);
+    }
+}
+
 /* Mobile */
 @media (max-width: 768px) {
     .player-hand .card {
@@ -69,5 +114,22 @@
 
     .player-hand-container {
         padding: 4px 8px 12px;
+    }
+
+    @keyframes cardFlyOut {
+        0% {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        40% {
+            transform: translateY(-20px) scale(1.08);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-80px) scale(0.5);
+            opacity: 0;
+        }
     }
 }
